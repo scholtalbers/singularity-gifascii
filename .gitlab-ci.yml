@@ -1,4 +1,4 @@
-image: singularityware/singularity:gitlab-2.6
+image: singularityware/singularity:3.1
 
 build:
   script:
