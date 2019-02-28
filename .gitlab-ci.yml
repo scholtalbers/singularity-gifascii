@@ -1,6 +1,9 @@
 image: jelle/singularity-docker:gitlab-3.1
 
 build:
+  before_script:
+    # Configure the SYLABS_TOKEN as CI Environment Variable in Gitlab
+    - echo $SYLABS_TOKEN > $TOKENFILE
   script:
      - /bin/bash .gitlabci/build.sh Singularity
 
@@ -9,8 +12,9 @@ build:
       # (and make sure your define the encrypted environment credentials in gitlab
       # to push to your storage locations of choice
 
-     - mkdir -p build && cp *.simg build
-     - mkdir -p build && cp Singularity* build
+     - singularity push -t $TOKENFILE Singularity.sif library://$USER/$CONTAINER:$TAG
+      # - mkdir -p build && cp *.sif build
+      # - mkdir -p build && cp Singularity* build
 
       # Step 2. Take a look at "artifacts" below and add the paths you want added
       # You can also add the entire build folder. You can also upload to storage
@@ -23,11 +27,17 @@ build:
       #- /bin/bash build.sh --uri collection/container --cli globus Singularity
       #- /bin/bash build.sh --uri collection/container --cli registry Singularity
 
-  # This is where you can save job artifacts
+  # This is where you can save job artifacts - for git.embl.de these will be too large
   # https://docs.gitlab.com/ee/user/project/pipelines/job_artifacts.html
   # You can specify the path to containers or the build folder to save.
   # Don't forget to save your recipes too!
-  artifacts:
-      paths:
-        - build/Singularity.simg
-        - build/Singularity
+  #artifacts:
+  #    paths:
+  #      - build/Singularity.sif
+  #      - build/Singularity
+
+variables:
+  USER: "scholtalbers"
+  CONTAINER: "gifascii"
+  TAG: "latest"
+  TOKENFILE: "sylabs-token"
