@@ -12,7 +12,7 @@ build:
       # (and make sure your define the encrypted environment credentials in gitlab
       # to push to your storage locations of choice
 
-     - singularity -t $TOKENFILE push Singularity.sif library://$USER/$CONTAINER:$TAG
+     - singularity -t $TOKENFILE push Singularity.sif library://$USER/$PROJECT/$CONTAINER:$TAG
       # - mkdir -p build && cp *.sif build
       # - mkdir -p build && cp Singularity* build
 
@@ -38,6 +38,7 @@ build:
 
 variables:
   USER: "scholtalbers"
+  PROJECT: "default"
   CONTAINER: "gifascii"
   TAG: "latest"
   TOKENFILE: "sylabs-token"
