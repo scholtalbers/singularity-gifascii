@@ -5,29 +5,15 @@ build:
     # Configure the SYLABS_TOKEN as CI Environment Variable in Gitlab
     - echo $SYLABS_TOKEN > $TOKENFILE
   script:
-     - /bin/bash .gitlabci/build.sh Singularity
-
-      # step 1. build the container!
-      # You can add any other sregistry push commands here, and specify a client
-      # (and make sure your define the encrypted environment credentials in gitlab
-      # to push to your storage locations of choice
-
+    # step 1. build the container!
+    - /bin/bash .gitlabci/build.sh Singularity
+    # step 2. push to library
      - singularity -t $TOKENFILE push Singularity.sif library://$USER/$PROJECT/$CONTAINER:$TAG
-      # - mkdir -p build && cp *.sif build
-      # - mkdir -p build && cp Singularity* build
+    # step 3. build artifacts, although git.embl.de restrict the size, so not that useful atm. 
+    # - mkdir -p build && cp *.sif build
+    # - mkdir -p build && cp Singularity* build
 
-      # Step 2. Take a look at "artifacts" below and add the paths you want added
-      # You can also add the entire build folder. You can also upload to storage
-      # clients defined by sregistry, here are some examples
-      # https://singularityhub.github.io/sregistry-cli/clients
-      # Environment variables must be defined in CI encrypted secrets/settings
-      # https://code.stanford.edu/help/ci/variables/README#variables).
-      #- /bin/bash build.sh --uri collection/container --cli google-storage Singularity
-      #- /bin/bash build.sh --uri collection/container --cli google-drive Singularity
-      #- /bin/bash build.sh --uri collection/container --cli globus Singularity
-      #- /bin/bash build.sh --uri collection/container --cli registry Singularity
-
-  # This is where you can save job artifacts - for git.embl.de these will be too large
+  # This is where you can save job artifacts
   # https://docs.gitlab.com/ee/user/project/pipelines/job_artifacts.html
   # You can specify the path to containers or the build folder to save.
   # Don't forget to save your recipes too!
@@ -37,6 +23,7 @@ build:
   #      - build/Singularity
 
 variables:
+  # Variables that will be used in the build commands
   USER: "scholtalbers"
   PROJECT: "default"
   CONTAINER: "gifascii"
