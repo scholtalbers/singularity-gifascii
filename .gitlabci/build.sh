@@ -134,39 +134,6 @@ if [ -f "$recipe" ]; then
     echo "Creating $imagefile using $recipe..."
     singularity build $imagefile $recipe
 
-    # If the image is successfully built, test it and upload (examples)
-
-    if [ -f "${imagefile}" ]; then
-
-        # Example testing using run (you could also use test command)
-
-        echo "Testing the image... Marco!"
-        singularity exec $imagefile echo "Polo!"
-
-        # Example sregistry commands to push to endpoints
-
-        if [ "${cli}" != "" ]; then
-
-            # If the uri isn't provided, he gets a robot name
-            if [ "${uri}" == "" ]; then
-                uri=$(python -c "from sregistry.logger.namer import RobotNamer; bot=RobotNamer(); print(bot.generate())")
-            fi
-
-            # If a tag is provided, add to uri
-            if [ "${tag}" != "" ]; then
-                uri="${uri}:${tag}"
-            fi
-
-            echo "Pushing ${uri} to ${cli}://"
-            echo "SREGISTRY_CLIENT=${cli} sregistry push --name ${uri} ${imagefile}"
-            SREGISTRY_CLIENT="${cli}" sregistry push --name "${uri}" "${imagefile}"
-
-        else
-            echo "Skipping upload. Image $imagefile is finished!"
-        fi
-
-    fi
-
 else
 
     echo "Singularity recipe ${recipe} not found!"
