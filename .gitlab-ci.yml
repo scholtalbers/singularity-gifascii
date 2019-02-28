@@ -8,7 +8,7 @@ build:
     # step 1. build the container!
     - /bin/bash .gitlabci/build.sh Singularity
     # step 2. push to library
-     - singularity -t $TOKENFILE push Singularity.sif library://$USER/$PROJECT/$CONTAINER:$TAG
+    - singularity -t $TOKENFILE push Singularity.sif library://$USER/$PROJECT/$CONTAINER:$TAG
     # step 3. build artifacts, although git.embl.de restrict the size, so not that useful atm. 
     # - mkdir -p build && cp *.sif build
     # - mkdir -p build && cp Singularity* build
